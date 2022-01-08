@@ -145,7 +145,9 @@ def train(args, log_dir, checkpoint_path, trainloader, testloader, tensorboard, 
     if checkpoint_path is not None:
         print("Continue training from checkpoint: %s" % checkpoint_path)
         try:
-            checkpoint = torch.load(checkpoint_path, map_location='cpu')
+            checkpoint = torch.load(checkpoint_path, 
+                                    map_location=torch.device('cpu')
+            )
             model.load_state_dict(checkpoint['model'])
         except:
             print(" > Partial model initialization.")
