@@ -43,7 +43,7 @@ class AudioProcessor(object):
         feature = SCALER.fit_transform(audio_class(y))
         # feature = audio_class(y)
         feature = torch.from_numpy(feature).float()
-        print(f"FEATURE SHAPE: {feature.shape})")
+        # print(f"FEATURE SHAPE: {feature.shape})")
         return feature
 
     def get_feature_from_audio_path(self, audio_path):
