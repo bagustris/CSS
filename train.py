@@ -263,7 +263,7 @@ def train(args, log_dir, checkpoint_path, trainloader, testloader, tensorboard, 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config_path', type=str, required=True,
-                        help="json file with configurations")
+                        help="yaml file with configurations")
     parser.add_argument('--checkpoint_path', type=str, default=None,
                         help="path of checkpoint pt file, for continue training")
     parser.add_argument('-s', '--seed', type=int, default=None,
@@ -286,7 +286,7 @@ if __name__ == '__main__':
     max_seq_len = trainloader.dataset.get_max_seq_lenght()
     c.dataset['max_seq_len'] = max_seq_len
 
-    # save config in train dir, its necessary for test before train and reproducity
+    # save config in train dir, its necessary for test before train and reproducibility
     save_config_file(c, os.path.join(log_path,'config.json'))
     # one_window in eval use overlapping
     if c.dataset['temporal_control'] == 'one_window':

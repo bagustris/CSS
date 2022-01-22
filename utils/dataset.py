@@ -42,7 +42,8 @@ class AugmentWAV(object):
         wav = audio.numpy().reshape(-1)
         clean_db = 10 * numpy.log10(numpy.mean(wav ** 2)+1e-4) 
         numnoise = self.numnoise[noisecat]
-        noiselist = random.sample(self.noiselist[noisecat], random.randint(numnoise[0],numnoise[1]))
+        noiselist = random.sample(self.noiselist[noisecat], 
+                        random.randint(numnoise[0],numnoise[1]))
 
         final_noise_audio = None
         for noise in noiselist:
@@ -111,7 +112,7 @@ class Dataset(Dataset):
             min_seq = float('inf')
             for idx in range(len(self.dataset_list)):
                 wav = self.ap.load_wav(os.path.join(self.dataset_root, self.dataset_list[idx][0]))
-                # calculate time step dim using hop lenght
+                # calculate time step dim using hop length
                 seq_len = int((wav.shape[1]/c.audio['hop_length'])+1)
                 if seq_len > self.max_seq_len:
                     self.max_seq_len = seq_len
@@ -121,7 +122,7 @@ class Dataset(Dataset):
             print("The Min Time dim Lenght is: {} (+- {} seconds)".format(min_seq, (min_seq*self.c.audio['hop_length'])/self.ap.sample_rate))
 
         elif self.c.dataset['temporal_control'] == 'overlapping' or self.c.dataset['temporal_control'] == 'speech_t' or self.c.dataset['temporal_control'] == 'one_window':
-            # set max len for window_len seconds multiply by sample_rate and divide by hop_lenght
+            # set max len for window_len seconds multiply by sample_rate and divide by hop_length
             self.max_seq_len = int(((self.c.dataset['window_len']*self.ap.sample_rate)/c.audio['hop_length'])+1)
             print("The Max Time dim Lenght is: ", self.max_seq_len, "It's use overlapping technique, window:", self.c.dataset['window_len'], "step:", self.c.dataset['step'])
         else: # for eval set max_seq_len in train mode

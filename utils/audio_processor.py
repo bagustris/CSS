@@ -1,8 +1,15 @@
+import torch
 import torchaudio
 # import s3prl.hub as hub
 from sklearn.preprocessing import StandardScaler
+import numpy as np
 
-SCALER = StandardScaler()
+class StandardScaler3D(StandardScaler):
+    def fit_transform(self, X, y=None):
+        x = np.reshape(X, newshape=(X.shape[0]*X.shape[1], X.shape[2]))
+        return np.reshape(super().fit_transform(x, y=y), newshape=X.shape)
+
+SCALER = StandardScaler3D()
 
 class AudioProcessor(object):
     def __init__(self, feature, num_mels, num_mfcc, log_mels, mel_fmin, mel_fmax, normalize, sample_rate, n_fft, num_freq, hop_length, win_length):
@@ -32,20 +39,21 @@ class AudioProcessor(object):
             audio_class = torchaudio.transforms.MFCC(sample_rate=self.sample_rate, n_mfcc=self.num_mfcc, log_mels=self.log_mels, melkwargs={'n_fft':self.n_fft, 'win_length':self.win_length, 'hop_length':self.hop_length, 'n_mels':self.num_mels})
         # elif self.feature == 'wav2vec2':
         #     audio_class = getattr(hub, 'wav2vec2')()
-            
-        feature = audio_class(y)
+        
+        feature = SCALER.fit_transform(audio_class(y))
+        # feature = audio_class(y)
+        feature = torch.from_numpy(feature).float()
+        print(f"FEATURE SHAPE: {feature.shape})")
         return feature
 
     def get_feature_from_audio_path(self, audio_path):
-        feat = self.wav2feature(self.load_wav(audio_path))
-        return SCALER.fit_transform(feat)
+        return self.wav2feature(self.load_wav(audio_path))
 
     def get_feature_from_audio(self, wav):
-        feat = self.wav2feature(wav)
-        return SCALER.fit_transform(feat)
+        return self.wav2feature(wav)
 
     def load_wav(self, path):
-        # load wav and normalize to [-1, 1]
+        # load audio path and normalize to [-1, 1]
         wav, sample_rate = torchaudio.load(path, normalize=self.normalize)
         # resample audio for specific samplerate
         if sample_rate != self.sample_rate:
