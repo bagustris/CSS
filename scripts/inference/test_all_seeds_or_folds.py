@@ -121,12 +121,7 @@ def test(ap, model, c, testloader,  cuda, confusion_matrix=False, debug=False, s
 
             names += name
     
-    return preds, targets, names
-
-
-            
-       
-
+    return preds, targets, name
 
 def run_test_all_kfolds(experiment_dir, test_csv, test_root_dir, batch_size, num_workers, simples_vote, output_csv, cuda=True, debug=False, return_target=False, return_potential=False, insert_noise=False, num_additive_noise=0, num_specaug=0, noisetypes=None, musan_path=None):
     folds = os.listdir(experiment_dir)

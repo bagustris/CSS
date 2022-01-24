@@ -1,5 +1,5 @@
 {
-    "model_name":"panns_resnet", // spiraconv_v1 and spiraconv_v2
+    "model_name":"panns_resnet", // panns_resnet
     "seed":42,
     "dataset":{
         "class_balancer_batch": true,  // if true use WeightedRandomSampler for get a balanced batch
@@ -9,7 +9,7 @@
         "step": 1, // step len in seconds for overlapping technique
         // "padding_with_max_lenght": true,// if true, the timestep axis will be padded with the longest sequence, else, the timestep will be dynamic and the network will predict a vector of the size of the timestep on the output (if you use convulsions it can decrease)
         "temporal_control": "padding", // overlapping, padding, avgpool
-        "max_seq_len": null, // the data loader set automatically this value and save in train_config['logs_path']/config.json. its is max time dimension value in your train dataset. For convert this value to seconds use: value*hop_length/sample_rate
+        "max_seq_len": null, // the data loader set automatically this value and save in train_config['logs_path']/config.json. it is max time dimension value in your train dataset. For convert this value to seconds use: value*hop_length/sample_rate
 
         // train dataset
         "train_csv": "/groups/gac50538/ComParE2021-CSS/lab/train.csv", // format path_wav, class
@@ -70,11 +70,12 @@
         "feature": "melspectrogram", // spectrogram or melspectrogram or mfcc
         // wave load paramers
         "sample_rate": 16000,
+        "scaled": false,
         "normalize": true, // if true, then output is divided by 1 << 31 (assumes signed 32-bit audio), and normalizes to [-1, 1]. If number, then output is divided by that number If callable, then the output is passed as a parameter to the given function, then the output is divided by the result. 
 
         // mel spectorgram paramers
         "num_mels": 64, // number of mels coefficients
-        "mel_fmin": 0.0, // minimum freq level for mel-spec. ~50 for male and ~95 for female voices. Tune for dataset!!
+        "mel_fmin": 0, // minimum freq level for mel-spec. ~50 for male and ~95 for female voices. Tune for dataset!!
         "mel_fmax": null, // maximum freq level for mel-spec. Tune for dataset!!  good value 8000.0
 
         // mfcc paramers

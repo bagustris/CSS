@@ -28,7 +28,7 @@
         "patient_class": 1 // positive
     },
     "model":{
-        "pretreined_checkpoint": "/home/aad13432ni/github/CSS/models/ResNet38_mAP=0.434.pth", // downlaod: https://zenodo.org/record/3987831/files/Cnn14_16k_mAP%3D0.438.pth?download=1
+        "pretreined_checkpoint": "/home/aad13432ni/github/CSS/models/ResNet38_mAP=0.434.pth", // download: https://zenodo.org/record/3987831/files/Cnn14_16k_mAP%3D0.438.pth?download=1
         "freeze_base": false,
         "mixup": true,
         "mixup_alpha": 1,
@@ -36,7 +36,7 @@
         "num_class":1
     },
     "train_config": {
-        "early_stop_epochs": 0, // if 0 disable else if the model does not improve after "early_stop_epochs" epochs, training is stopped
+        "early_stop_epochs": 10, // if 0 disable else if the model does not improve after "early_stop_epochs" epochs, training is stopped
         "lr_decay": true, // activate/desactivate Noam Learning Rate Decay Scheme    
         "warmup_steps": 500, //default 4000, Noam decay steps to increase the learning rate from 0 to "lr"
         "epochs": 100,
@@ -46,7 +46,7 @@
         "loss1_weight": 3.0, // 3.37 
         "batch_size": 16,
         "seed": 42,
-        "num_workers": 14,
+        "num_workers": 64,
         "logs_path": "/home/aad13432ni/github/CSS/logs/",
         "reinit_layers": null,
         "summary_interval": 10,
@@ -69,6 +69,7 @@
     "audio": {
         "feature": "melspectrogram", // spectrogram or melspectrogram or mfcc
         // wave load paramers
+        "scaled": false,
         "sample_rate": 16000,
         "normalize": true, // if true, then output is divided by 1 << 31 (assumes signed 32-bit audio), and normalizes to [-1, 1]. If number, then output is divided by that number If callable, then the output is passed as a parameter to the given function, then the output is divided by the result. 
 
