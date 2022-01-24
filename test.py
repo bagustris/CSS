@@ -42,7 +42,8 @@ np.random.seed(42)
 
 
 def test(
-    criterion, ap, model, c, testloader, step, cuda, confusion_matrix=False, debug=False
+    criterion, ap, model, c, testloader, step, cuda, confusion_matrix=True, 
+    debug=False
 ):
     losses = []
     accs = []
@@ -124,14 +125,14 @@ def test(
         names_patient = names[idxs]
 
         if debug:
-            print("+" * 40)
+            print("=" * 80)
             print("Control Files Classified incorrectly:")
             incorrect_ids = np.nonzero(control_preds != c.dataset["control_class"])
             inc_names = names_control[incorrect_ids]
             print("Num. Files:", len(inc_names))
             print(inc_names)
-            print("+" * 40)
-            print("-" * 40)
+            print("=" * 80)
+            print("=" * 80)
             print("Patient Files Classified incorrectly:")
             incorrect_ids = np.nonzero(patient_preds != c.dataset["patient_class"])
             inc_names = names_patient[incorrect_ids]
@@ -238,19 +239,19 @@ if __name__ == "__main__":
     # python test.py --test_csv ../SPIRA_Dataset_V1/metadata_test.csv -r ../SPIRA_Dataset_V1/ --checkpoint_path ../checkpoints/spiraconv-trained-with-SPIRA_Dataset_V1/spiraconv/checkpoint_1068.pt --config_path ../checkpoints/spiraconv-trained-with-SPIRA_Dataset_V1/spiraconv/config.json  --batch_size 5 --num_workers 2 --no_insert_noise True
 
     parser = argparse.ArgumentParser()
-    parser.add_argument(
+    parser.add_argument( 
         "-t",
         "--test_csv",
         type=str,
-        required=True,
-        default='/groups/gac50538/ComParE2021-CSS/lab/metaData_CSS.csv',
+        # required=True,
+        default='/groups/gac50538/ComParE2021-CSS/lab/metaData_CSS_test.csv',
         help="test csv example: ../ComParE2021-CSS/lab/metaData_CSS",
     )
     parser.add_argument(
         "-r",
         "--test_root_dir",
         type=str,
-        required=True,
+        # required=True,
         default='/groups/gac50538/ComParE2021-CSS/wav/',
         help="Test wav dir example: ../SPIRA_Dataset_V1/",
     )
@@ -262,10 +263,11 @@ if __name__ == "__main__":
         help="json file with configurations get in checkpoint path",
     )
     parser.add_argument(
+        "-cp",
         "--checkpoint_path",
         type=str,
         default=None,
-        required=True,
+        # required=True,
         help="path of checkpoint pt file, for continue training",
     )
     parser.add_argument(
